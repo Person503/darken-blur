@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Editor</title>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #0d1117; /* GitHub Dark Background */
+  color: #c9d1d9; /* GitHub Dark Text */
+}
+
+.container {
+  width: 80%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 2px dashed #444; /* Darker Border */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: filter 0.3s ease;
+  max-height: 400px;
+  object-fit: contain;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Stronger Shadow */
+}
+
+.slider-container {
+  width: 80%;
+  max-width: 400px;
+  margin-bottom: 15px;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  background: #30363d; /* Darker Slider Track */
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #6f42c1; /* GitHub Purple */
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Stronger Shadow */
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #6f42c1; /* GitHub Purple */
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Stronger Shadow */
+  border: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #c9d1d9; /* GitHub Dark Text */
+}
+
+input[type="file"] {
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  border: 1px solid #444; /* Darker Border */
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #21262d; /* Darker Input Background */
+  color: #c9d1d9; /* GitHub Dark Text */
+}
+
+/* Mobile-friendly adjustments */
+@media (max-width: 600px) {
+  .container, .slider-container {
+    width: 95%;
+  }
+}
+</style>
+</head>
+<body>
+
+<input type="file" id="imageInput" accept="image/*">
+
+<div class="container" id="dropArea">
+  <img id="myImage" src="https://via.placeholder.com/600x400" alt="Placeholder Image">
+</div>
+
+<div class="slider-container">
+  <label for="blur">Blur:</label>
+  <input type="range" id="blur" min="0" max="20" value="0">
+</div>
+
+<div class="slider-container">
+  <label for="brightness">Brightness:</label>
+  <input type="range" id="brightness" min="0" max="200" value="100">
+</div>
+
+<script>
+const img = document.getElementById('myImage');
+const blurSlider = document.getElementById('blur');
+const brightnessSlider = document.getElementById('brightness');
+const imageInput = document.getElementById('imageInput');
+const dropArea = document.getElementById('dropArea');
+
+function updateImageFilters() {
+  const blurValue = blurSlider.value;
+  const brightnessValue = brightnessSlider.value;
+
+  img.style.filter = `blur(${blurValue}px) brightness(${brightnessValue}%)`;
+}
+
+blurSlider.addEventListener('input', updateImageFilters);
+brightnessSlider.addEventListener('input', updateImageFilters);
+
+imageInput.addEventListener('change', function(event) {
+  handleImageUpload(event.target.files[0]);
+});
+
+// Drag and Drop
+dropArea.addEventListener('dragover', function(event) {
+  event.preventDefault();
+  dropArea.style.backgroundColor = '#21262d'; /* Darker Highlight */
+});
+
+dropArea.addEventListener('dragleave', function(event) {
+  event.preventDefault();
+  dropArea.style.backgroundColor = 'transparent';
+});
+
+dropArea.addEventListener('drop', function(event) {
+  event.preventDefault();
+  dropArea.style.backgroundColor = 'transparent';
+  handleImageUpload(event.dataTransfer.files[0]);
+});
+
+// Paste
+document.addEventListener('paste', function(event) {
+  const items = (event.clipboardData || event.clipboardData).items;
+  for (let index in items) {
+    const item = items[index];
+    if (item.kind === 'file') {
+      const blob = item.getAsFile();
+      handleImageUpload(blob);
+    }
+  }
+});
+
+function handleImageUpload(file) {
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      img.src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+  } else {
+    alert('Please upload a valid image file.');
+  }
+}
+</script>
+
+</body>
+</html>
