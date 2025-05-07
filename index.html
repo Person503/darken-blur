@@ -6,46 +6,83 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
   margin: 0;
-  background-color: #0d1117; /* GitHub Dark Background */
-  color: #c9d1d9; /* GitHub Dark Text */
+  background-color: #0d1117;
+  color: #c9d1d9;
 }
 
 .container {
-  width: 80%;
-  max-width: 600px;
-  margin-bottom: 20px;
-  text-align: center;
-  border: 2px dashed #444; /* Darker Border */
-  padding: 20px;
+  display: flex;
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.side {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.input-side {
+  background-color: #161b22;
+  border-right: 1px solid #30363d;
+}
+
+.output-side {
+  background-color: #161b22;
 }
 
 img {
   width: 100%;
-  height: auto;
-  border-radius: 8px;
-  transition: filter 0.3s ease;
   max-height: 400px;
   object-fit: contain;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Stronger Shadow */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  transition: filter 0.3s ease;
+}
+
+#outputImage {
+  display: block;
+  margin: 0 auto; /* Center the output image horizontally */
+}
+
+.drop-area {
+  border: 2px dashed #444;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+input[type="file"] {
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #21262d;
+  color: #c9d1d9;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .slider-container {
   width: 80%;
   max-width: 400px;
-  margin-bottom: 15px;
+  margin: 15px auto;
 }
 
 input[type="range"] {
   width: 100%;
   height: 8px;
   -webkit-appearance: none;
-  background: #30363d; /* Darker Slider Track */
+  background: #30363d;
   border-radius: 5px;
   outline: none;
   transition: background 0.2s;
@@ -55,19 +92,19 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
-  background: #6f42c1; /* GitHub Purple */
+  background: #58a6ff; /* Blue Slider Thumb */
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Stronger Shadow */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 }
 
 input[type="range"]::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background: #6f42c1; /* GitHub Purple */
+  background: #58a6ff; /* Blue Slider Thumb */
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7); /* Stronger Shadow */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
   border: none;
 }
 
@@ -75,57 +112,83 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
-  color: #c9d1d9; /* GitHub Dark Text */
+  color: #c9d1d9;
 }
 
-input[type="file"] {
-  margin-bottom: 15px;
-  padding: 8px 12px;
-  border: 1px solid #444; /* Darker Border */
-  border-radius: 4px;
+button {
+  padding: 10px 15px;
+  background-color: #3182f6; /* Blue Button */
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  background-color: #21262d; /* Darker Input Background */
-  color: #c9d1d9; /* GitHub Dark Text */
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #58a6ff; /* Lighter Blue Hover */
 }
 
 /* Mobile-friendly adjustments */
-@media (max-width: 600px) {
-  .container, .slider-container {
-    width: 95%;
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .side {
+    width: 100%;
+  }
+
+  .input-side {
+    border-right: none;
+    border-bottom: 1px solid #30363d;
   }
 }
 </style>
 </head>
 <body>
 
-<input type="file" id="imageInput" accept="image/*">
+<div class="container">
+  <div class="side input-side">
+    <h2>Input</h2>
+    <div class="drop-area" id="inputDropArea">
+      <input type="file" id="imageInput" accept="image/*">
+    </div>
+    <img id="inputImage" src="https://via.placeholder.com/400x300" alt="Input Image">
+    <div class="slider-container">
+      <label for="blur">Blur:</label>
+      <input type="range" id="blur" min="0" max="20" value="0">
+    </div>
+    <div class="slider-container">
+      <label for="brightness">Brightness:</label>
+      <input type="range" id="brightness" min="0" max="200" value="100">
+    </div>
+  </div>
 
-<div class="container" id="dropArea">
-  <img id="myImage" src="https://via.placeholder.com/600x400" alt="Placeholder Image">
-</div>
-
-<div class="slider-container">
-  <label for="blur">Blur:</label>
-  <input type="range" id="blur" min="0" max="20" value="0">
-</div>
-
-<div class="slider-container">
-  <label for="brightness">Brightness:</label>
-  <input type="range" id="brightness" min="0" max="200" value="100">
+  <div class="side output-side">
+    <h2>Output</h2>
+    <img id="outputImage" src="https://via.placeholder.com/400x300" alt="Output Image">
+    <button id="downloadButton">Download Image</button>
+    <button id="copyButton">Copy Image</button>
+  </div>
 </div>
 
 <script>
-const img = document.getElementById('myImage');
+const inputImage = document.getElementById('inputImage');
+const outputImage = document.getElementById('outputImage');
 const blurSlider = document.getElementById('blur');
 const brightnessSlider = document.getElementById('brightness');
 const imageInput = document.getElementById('imageInput');
-const dropArea = document.getElementById('dropArea');
+const inputDropArea = document.getElementById('inputDropArea');
+const downloadButton = document.getElementById('downloadButton');
+const copyButton = document.getElementById('copyButton');
 
 function updateImageFilters() {
   const blurValue = blurSlider.value;
   const brightnessValue = brightnessSlider.value;
 
-  img.style.filter = `blur(${blurValue}px) brightness(${brightnessValue}%)`;
+  const filterString = `blur(${blurValue}px) brightness(${brightnessValue}%)`;
+  outputImage.style.filter = filterString;
 }
 
 blurSlider.addEventListener('input', updateImageFilters);
@@ -136,45 +199,74 @@ imageInput.addEventListener('change', function(event) {
 });
 
 // Drag and Drop
-dropArea.addEventListener('dragover', function(event) {
+inputDropArea.addEventListener('dragover', function(event) {
   event.preventDefault();
-  dropArea.style.backgroundColor = '#21262d'; /* Darker Highlight */
+  inputDropArea.style.backgroundColor = '#21262d';
 });
 
-dropArea.addEventListener('dragleave', function(event) {
+inputDropArea.addEventListener('dragleave', function(event) {
   event.preventDefault();
-  dropArea.style.backgroundColor = 'transparent';
+  inputDropArea.style.backgroundColor = 'transparent';
 });
 
-dropArea.addEventListener('drop', function(event) {
+inputDropArea.addEventListener('drop', function(event) {
   event.preventDefault();
-  dropArea.style.backgroundColor = 'transparent';
+  inputDropArea.style.backgroundColor = 'transparent';
   handleImageUpload(event.dataTransfer.files[0]);
-});
-
-// Paste
-document.addEventListener('paste', function(event) {
-  const items = (event.clipboardData || event.clipboardData).items;
-  for (let index in items) {
-    const item = items[index];
-    if (item.kind === 'file') {
-      const blob = item.getAsFile();
-      handleImageUpload(blob);
-    }
-  }
 });
 
 function handleImageUpload(file) {
   if (file && file.type.startsWith('image/')) {
     const reader = new FileReader();
     reader.onload = function(e) {
-      img.src = e.target.result;
+      inputImage.src = e.target.result;
+      outputImage.src = e.target.result;
+      updateImageFilters();
     }
     reader.readAsDataURL(file);
   } else {
     alert('Please upload a valid image file.');
   }
 }
+
+downloadButton.addEventListener('click', function() {
+  const canvas = document.createElement('canvas');
+  canvas.width = outputImage.naturalWidth;
+  canvas.height = outputImage.naturalHeight;
+  const ctx = canvas.getContext('2d');
+
+  ctx.filter = outputImage.style.filter;
+
+  ctx.drawImage(outputImage, 0, 0, canvas.width, canvas.height);
+
+  const dataURL = canvas.toDataURL('image/png');
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = 'edited_image.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
+
+copyButton.addEventListener('click', function() {
+  const canvas = document.createElement('canvas');
+    canvas.width = outputImage.naturalWidth;
+    canvas.height = outputImage.naturalHeight;
+    const ctx = canvas.getContext('2d');
+
+    ctx.filter = outputImage.style.filter;
+
+    ctx.drawImage(outputImage, 0, 0, canvas.width, canvas.height);
+
+  canvas.toBlob(blob => {
+    const item = new ClipboardItem({ "image/png": blob });
+    navigator.clipboard.write([item]).then(() => {
+      alert('Image copied to clipboard!');
+    }).catch(err => {
+      console.error('Could not copy: ', err);
+    });
+  });
+});
 </script>
 
 </body>
